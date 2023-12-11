@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 
-export default function Home() {
+export default function ListArticle() {
   const [article, setArticle] = useState({
     title: '',
     description: '',
@@ -12,7 +12,7 @@ export default function Home() {
     shippingOption: '',
   });
 
-  const handleChange = (e) => {
+  const handleChange = (e:any) => {
     const { name, value } = e.target;
     setArticle((prevArticle) => ({
       ...prevArticle,
@@ -20,7 +20,7 @@ export default function Home() {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e:any) => {
     e.preventDefault();
 
     try {
