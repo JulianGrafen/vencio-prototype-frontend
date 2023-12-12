@@ -10,6 +10,8 @@ export default function Register() {
   const [loginName, setLoginName] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginToken, setLoginToken] = useState<string | null>(null);
+  const [error, setError] = useState('');
+
 
   const router = useRouter(); // Use useRouter here
 
@@ -23,11 +25,15 @@ export default function Register() {
         body: JSON.stringify({ name: registerName, password: registerPassword, email: registerEmail }),
       });
 
-      const data = await response.json();
-      console.log('Registration successful. Token:', data.access_token);
 
+      if(response.status === 409){
+        setError("Email is already taken");
+        console.log("E-Mail already registered");
+      }else if(response.ok){
+        router.push('/home');
+
+      }
       // Redirect after successful registration
-      router.push('/login');
     } catch (error) {
       console.error('Registration failed:', error);
     }
@@ -87,6 +93,7 @@ export default function Register() {
           onChange={(e) => setRegisterEmail(e.target.value)}
           className="w-full p-2 mb-4 border rounded"
         />
+         {error && <p className="text-red-500">{error}</p>}
         <button onClick={handleRegister} className="bg-blue-500 text-white px-4 py-2 rounded">
           Register
         </button>
@@ -112,3 +119,5 @@ export default function Register() {
       </div>
     );
   }
+
+
