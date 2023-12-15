@@ -11,30 +11,28 @@ export default function CreateNewAccounts() {
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
 
+
     
   const router = useRouter();
 
   
     const handleRegistration = async () => {
+      const storedUserId = localStorage.getItem('userId');
         try {
             const response = await fetch('http://localhost:5000/auth/registerpartnerAccount', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',
               },
-              body: JSON.stringify({ name: username, password: password, email: email }),
-            });
-      
-      
+              body: JSON.stringify({ name: username, password: password, email: email, id: storedUserId }),
+            });  
             if(response.ok){
               router.push('/home');
               console.log("Registriation successful")
             }else if(response.status ===409){
               setError("Email is already taken, please use another E-Mail");
               console.log("E-Mail already registered");
-
             }
-            // Redirect after successful registration
           } catch (error) {
             console.error('Registration failed:', error);
           }

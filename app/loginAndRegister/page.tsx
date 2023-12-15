@@ -11,6 +11,8 @@ export default function Register() {
   const [loginPassword, setLoginPassword] = useState('');
   const [loginToken, setLoginToken] = useState<string | null>(null);
   const [error, setError] = useState('');
+  const [userId, setUserId] = useState('');
+
 
 
   const router = useRouter(); // Use useRouter here
@@ -22,22 +24,29 @@ export default function Register() {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: registerName, password: registerPassword, email: registerEmail }),
-      });
 
+        body: JSON.stringify({ name: registerName, password: registerPassword, email: registerEmail }),
+
+      });
 
       if(response.status === 409){
         setError("Email is already taken");
         console.log("E-Mail already registered");
       }else if(response.ok){
+        const data = await response.json();
+        const { userId } = data;
+        setUserId(userId);
+        localStorage.setItem('userId', userId);
+        console.log(localStorage.userId);
         router.push('/createNewAccounts');
 
       }
-      // Redirect after successful registration
     } catch (error) {
       console.error('Registration failed:', error);
     }
   };
+
+
 
   const handleLogin = async () => {
     console.log("click");
