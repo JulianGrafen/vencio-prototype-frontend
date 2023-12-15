@@ -30,7 +30,7 @@ export default function Register() {
         setError("Email is already taken");
         console.log("E-Mail already registered");
       }else if(response.ok){
-        router.push('/home');
+        router.push('/createNewAccounts');
 
       }
       // Redirect after successful registration
@@ -65,8 +65,6 @@ export default function Register() {
       console.error('Login failed:', error);
     }
   };
-
-
 
 
     return (
