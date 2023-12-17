@@ -10,18 +10,22 @@ export default function ListArticle() {
     category: '',
     condition: '',
     shippingOption: '',
+    userId:'',
   });
 
   const handleChange = (e:any) => {
+    const storedUserId = localStorage.getItem('userId')??"";
+
+
     const { name, value } = e.target;
     setArticle((prevArticle) => ({
       ...prevArticle,
       [name]: value,
+      userId: storedUserId
     }));
   };
 
   const handleSubmit = async (e:any) => {
-    const storedUserId = localStorage.getItem('userId');
     e.preventDefault();
 
     try {
@@ -31,6 +35,7 @@ export default function ListArticle() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(article),
+        
       });
 
       if (response.ok) {
@@ -46,6 +51,7 @@ export default function ListArticle() {
 
 
   return (
+    
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-100">
       <h1 className='text-3xl font-bold mb-3'>VENCIO</h1>
       <div className="max-w-md w-full bg-white p-8 rounded-md shadow-md">
@@ -63,6 +69,7 @@ export default function ListArticle() {
           <label>
             Description:
             <textarea
+            
               name="description"
               value={article.description}
               onChange={handleChange}
@@ -110,6 +117,7 @@ export default function ListArticle() {
             />
           </label>
           <button
+        
             type="submit"
             className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-all"
           >
