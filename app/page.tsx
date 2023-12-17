@@ -21,6 +21,7 @@ export default function ListArticle() {
   };
 
   const handleSubmit = async (e:any) => {
+    const storedUserId = localStorage.getItem('userId');
     e.preventDefault();
 
     try {

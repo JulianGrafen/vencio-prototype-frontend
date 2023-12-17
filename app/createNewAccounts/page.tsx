@@ -18,6 +18,7 @@ export default function CreateNewAccounts() {
   
     const handleRegistration = async () => {
       const storedUserId = localStorage.getItem('userId');
+      console.log(storedUserId);
         try {
             const response = await fetch('http://localhost:5000/auth/registerpartnerAccount', {
               method: 'POST',
