@@ -15,7 +15,7 @@ export default function ListArticle() {
 
   const handleChange = (e:any) => {
     const storedUserId = localStorage.getItem('userId')??"";
-
+    console.log(storedUserId);
 
     const { name, value } = e.target;
     setArticle((prevArticle) => ({
