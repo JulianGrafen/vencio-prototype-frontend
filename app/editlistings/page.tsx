@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 
 interface Listing {
-  id: number;
+  _id: number;
   title: string;
   price: number;
   category: string;
@@ -11,13 +11,13 @@ interface Listing {
   shippingOption: string;
 }
 
-interface EditableListing extends Listing {
-  isEditing: boolean;
-}
+
+
 
 const EditListings = () => {
-  const [listings, setListings] = useState<EditableListing[]>([]);
+  const [listings, setListings] = useState<Listing[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const [editing, setEditing] = useState<boolean>();
 
   useEffect(() => {
     setUserId(localStorage.getItem('userId'));
@@ -27,6 +27,7 @@ const EditListings = () => {
     if (userId) {
       const getListings = async () => {
         try {
+          console.log(userId)
           const response = await fetch(`http://localhost:5000/articles/${userId}`);
           const jsonData = await response.json();
 
@@ -37,7 +38,6 @@ const EditListings = () => {
           console.error('Error fetching data:', error);
         }
       };
-
       getListings();
     }
   }, [userId]);
@@ -45,29 +45,31 @@ const EditListings = () => {
   const handleEdit = (index: number) => {
     setListings((prevListings) => {
       const updatedListings = [...prevListings];
-      updatedListings[index].isEditing = true;
+      setEditing(true);
       return updatedListings;
     });
   };
 
-  const handleSave = async (editedListing: EditableListing, index: number) => {
+
+  
+  const handleSave = async (listing: Listing, index: number) => {
     setListings((prevListings) => {
       const updatedListings = [...prevListings];
-      updatedListings[index].isEditing = false;
-      return updatedListings;    });
+      setEditing(false);
+      return updatedListings;   });
     try {
-      const response = await fetch(`http://localhost:5000/articles/${editedListing.id}`, {
+      const response = await fetch("http://localhost:5000/articles/updateArticle", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(editedListing),
+        body: JSON.stringify({id: listing._id, title: listing.title, price: listing.price, category: listing.category, condition: listing.condition, shippingOption: listing.shippingOption}),
       });
 
       if (response.ok) {
         setListings((prevListings) => {
           const updatedListings = [...prevListings];
-          updatedListings[index].isEditing = false;
+         setEditing(true);
           return updatedListings;
         });
       } else {
@@ -81,7 +83,7 @@ const EditListings = () => {
   const handleInputChange = (index: number, field: string, value: string | number) => {
     setListings((prevListings) => {
       const updatedListings = [...prevListings];
-      updatedListings[index][field] = value;
+      listings[index][field] = value;
       return updatedListings;
     });
   };
@@ -92,7 +94,7 @@ const EditListings = () => {
       <ul>
         {listings.map((listing, index) => (
           <li key={index} className="mb-4 p-4 border rounded">
-            {listing.isEditing ? (
+            {editing ? (
               <>
                 <label>
                   Title:
@@ -157,6 +159,7 @@ const EditListings = () => {
                 <button
                   onClick={() => handleEdit(index)}
                   className="bg-blue-500 text-white px-4 py-2 mt-2 rounded cursor-pointer"
+
                 >
                   Edit Listing
                 </button>
