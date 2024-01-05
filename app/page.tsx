@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
 export default function ListArticle() {
@@ -13,6 +14,8 @@ export default function ListArticle() {
     userId:'',
   });
 
+  const router = useRouter();
+
   const handleChange = (e:any) => {
     const storedUserId = localStorage.getItem('userId')??"";
     console.log(storedUserId);
@@ -24,6 +27,11 @@ export default function ListArticle() {
       userId: storedUserId
     }));
   };
+
+  const handleClick =()=> {
+    router.push("/editlistings")
+  }
+
 
   const handleSubmit = async (e:any) => {
     e.preventDefault();
@@ -52,7 +60,17 @@ export default function ListArticle() {
 
   return (
     
+    
     <main className="flex min-h-screen flex-col items-center justify-center p-24 bg-gray-100">
+      <ul className=''>
+        <li >
+          <button
+          onClick={handleClick}>
+            Edit listings
+          </button>
+        </li>
+      
+      </ul>
       <h1 className='text-3xl font-bold mb-3'>VENCIO</h1>
       <div className="max-w-md w-full bg-white p-8 rounded-md shadow-md">
         <h1 className="text-2xl font-bold mb-6">List an Article on 10+ Marketplaces!</h1>
@@ -117,7 +135,6 @@ export default function ListArticle() {
             />
           </label>
           <button
-        
             type="submit"
             className="bg-blue-500 text-white py-2 rounded-md hover:bg-blue-600 transition-all"
           >

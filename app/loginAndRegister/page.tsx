@@ -15,7 +15,7 @@ export default function Register() {
 
 
 
-  const router = useRouter(); // Use useRouter here
+  const router = useRouter();
 
   const handleRegister = async () => {
     try {
@@ -24,7 +24,6 @@ export default function Register() {
         headers: {
           'Content-Type': 'application/json',
         },
-
         body: JSON.stringify({ name: registerName, password: registerPassword, email: registerEmail }),
 
       });
@@ -49,9 +48,11 @@ export default function Register() {
 
 
   const handleLogin = async () => {
+    router.push("/editlistings");
     console.log("click");
-
+    
     try {
+
       const response = await fetch('http://localhost:5000/auth/login', {
         method: 'POST',
         headers: {
@@ -65,7 +66,6 @@ export default function Register() {
       if (response.ok) {
         setLoginToken(data.access_token);
 
-        router.push('/home');
         console.log('Login successful. Token:', data.access_token);
       } else {
         console.error('Login failed:', data.error);
